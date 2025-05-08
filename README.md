@@ -2,7 +2,8 @@
 This is a demo project how could be solved basic network alert system.
 Dask description is in folder: [Open File](./task/Java_homework_assignments.pdf)
 
-# Git hooks
+# Local setup guide
+## Git hooks
 Git test hook is added to this project via git maven hook plugin.
 
 For now, we only manage local githooks for precommit which will check mvn test lifecycle.
@@ -15,6 +16,8 @@ Ensure that execute rights are provided for script files. You can achieve that v
 `chmod +x .git/hooks/pre-commit`
 `chmod +x git-hooks/pre-commit.sh`
 
-# Code formating
+## Code formating
 For code formating is used [prettier plugin](https://github.com/HubSpot/prettier-maven-plugin?tab=readme-ov-file)
-Code is formated by this tool during pre-commit hook
+Code is formated by this tool during pre-commit hook.
+
+You can always trigger manual code format with command `./mvnw prettier:write`

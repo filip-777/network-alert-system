@@ -1,4 +1,4 @@
-package pl.sek.nas;
+package pl.sek.nas.domain;
 
 import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;

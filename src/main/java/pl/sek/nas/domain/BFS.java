@@ -4,12 +4,12 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class BFS {
+class BFS {
 
     private final static String QUEUE_START = "START";
     private final HashMap<String, LinkedList<String>> adjacencyList;
 
-    public BFS() {
+    BFS() {
         adjacencyList = new HashMap<>();
     }
 
@@ -19,7 +19,7 @@ public class BFS {
         }
     }
 
-    public void addServices(List<String> services) {
+    void addServices(List<String> services) {
         services.forEach(this::addService);
     }
 
@@ -29,7 +29,7 @@ public class BFS {
         adjacencyList.get(service).add(serviceDependency);
     }
 
-    public void addAllDependencies(HashMap<String, LinkedList<String>> dependencies) {
+    void addAllDependencies(HashMap<String, LinkedList<String>> dependencies) {
         dependencies.keySet().forEach(service ->
                 dependencies.get(service).forEach(serviceDependency ->
                         addDependency(service, serviceDependency)
@@ -37,7 +37,7 @@ public class BFS {
         );
     }
 
-    public List<String> findAllServicesBetween(String startService, String endService) {
+    List<String> findAllServicesBetween(String startService, String endService) {
         HashMap<String, Boolean> visited = markAsNotVisited();
 
         Queue<String> queue = new LinkedList<>();
@@ -68,7 +68,7 @@ public class BFS {
         return Collections.emptyList();
     }
 
-    public List<String> findAllAffectedServices(String startService) {
+    List<String> findAllAffectedServices(String startService) {
         HashMap<String, Boolean> visited = markAsNotVisited();
         Queue<String> queue = new LinkedList<>();
         List<String> reachedServices = new ArrayList<>();

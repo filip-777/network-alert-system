@@ -1,7 +1,6 @@
 package pl.sek.nas.domain;
 
 import java.util.List;
-import org.apache.commons.lang3.tuple.Pair;
 
 public interface AlertNetwork {
   void addService(String service);
@@ -9,5 +8,5 @@ public interface AlertNetwork {
   List<String> getDependencies(String service);
   List<String> findAlertPropagationPath(String source, String target);
   List<String> getAffectedServices(String source);
-  List<Pair<String, String>> suggestContainmentEdges(String source); // Bonus
+//  List<Pair<String, String>> suggestContainmentEdges(String source); // Bonus
 }

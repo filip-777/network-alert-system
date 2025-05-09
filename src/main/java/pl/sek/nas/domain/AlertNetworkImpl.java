@@ -1,12 +1,11 @@
 package pl.sek.nas.domain;
 
-import org.apache.commons.lang3.tuple.Pair;
 import pl.sek.nas.port.DependencyRepository;
 import pl.sek.nas.port.ServiceRepository;
 
 import java.util.List;
 
-public class AlertNetworkImpl implements AlertNetwork {
+class AlertNetworkImpl implements AlertNetwork {
 
     private final BFS bfs;
     private final DependencyRepository dependencyRepository;
@@ -46,10 +45,10 @@ public class AlertNetworkImpl implements AlertNetwork {
         return bfs.findAllAffectedServices(source);
     }
 
-    @Override
-    public List<Pair<String, String>> suggestContainmentEdges(String source) {
-        return List.of();
-    }
+//    @Override
+//    public List<Pair<String, String>> suggestContainmentEdges(String source) {
+//        return List.of();
+//    }
 
     private void loadDataFromInMemoryDB() {
         bfs.addAllDependencies(dependencyRepository.getAllDependencies());

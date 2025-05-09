@@ -104,9 +104,9 @@ class AlertNetworkTest {
         Assertions.assertEquals(List.of("B", "C", "D"), affectedServices);
     }
 
-    @Test
-    void suggestContainmentEdges() {
-    }
+//    @Test
+//    void suggestContainmentEdges() {
+//    }
 
 
 }

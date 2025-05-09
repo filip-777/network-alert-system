@@ -26,6 +26,7 @@ if [ "$config_is_set_up" == "true" ]; then
       exit 1
   fi
 
+  ./mvnw prettier:check
   ./mvnw clean verify
 
   if [ $? -ne 0 ]; then

@@ -47,6 +47,8 @@ Ensure that execute rights are provided for script files. You can achieve that v
 - `chmod +x git-hooks/pre-commit.sh`
 
 ## Code formating
-For code formating is used [prettier plugin](https://github.com/HubSpot/prettier-maven-plugin?tab=readme-ov-file)
+For code formating is used [prettier plugin](https://github.com/HubSpot/prettier-maven-plugin?tab=readme-ov-file). Code check is performed during git pre-commit hook.
 
-Trigger manual code format with command `./mvnw prettier:write`
+To update code you need manual trigger prettier plugin.
+
+You can do it by triggering manual code format with command `./mvnw prettier:write`

@@ -1,6 +1,30 @@
 # Network-alert-system
+
 This is a demo project how could be solved basic network alert system.
 Dask description is in folder: [Open File](./task/Java_homework_assignments.pdf)
+
+## API
+To use NAS (Network Alert System) you need to use **AlertNetworkProxy**
+In this class you have such methods:
+- void addService(String service);
+  - This method add service on which we later can add dependencies 
+- void addDependency(String fromService, String toService); // Directed edge
+  - This method ads dependencies to added to memory services
+  - This method will throw NoSuchElementException when service to which we wish to add dependencies is not found
+- List< String > getDependencies(String service);
+  - This method returns list of dependencies for provided service 
+- List < String > findAlertPropagationPath(String source, String target);
+  - This method returns name list of services affected by alert between two chosen services
+  - This method returns empty list if no services where affected
+- List < String > getAffectedServices(String source);
+  - This method returns all services which can be affected by service failure
+
+## Tests
+Test which show how system works are in AlertNetworkTest class
+
+## Architecture
+In this library is basic port-adapter architecture.
+If in memory database need to be switched to another one please provide right adapter and update AlertNetworkProxy class with it.
 
 # Local setup guide
 ## Git hooks
@@ -18,6 +42,5 @@ Ensure that execute rights are provided for script files. You can achieve that v
 
 ## Code formating
 For code formating is used [prettier plugin](https://github.com/HubSpot/prettier-maven-plugin?tab=readme-ov-file)
-Code is formated by this tool during pre-commit hook.
 
-You can always trigger manual code format with command `./mvnw prettier:write`
+Trigger manual code format with command `./mvnw prettier:write`

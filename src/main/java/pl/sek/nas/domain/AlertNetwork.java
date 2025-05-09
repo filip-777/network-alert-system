@@ -2,7 +2,7 @@ package pl.sek.nas.domain;
 
 import java.util.List;
 
-public interface AlertNetwork {
+interface AlertNetwork {
   void addService(String service);
   void addDependency(String fromService, String toService); // Directed edge
   List<String> getDependencies(String service);

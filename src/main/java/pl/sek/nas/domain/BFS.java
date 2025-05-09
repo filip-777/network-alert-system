@@ -5,116 +5,130 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 class BFS {
+  private static final String QUEUE_START = "START";
+  private final HashMap<String, LinkedList<String>> adjacencyList;
 
-    private final static String QUEUE_START = "START";
-    private final HashMap<String, LinkedList<String>> adjacencyList;
+  BFS() {
+    adjacencyList = new HashMap<>();
+  }
 
-    BFS() {
-        adjacencyList = new HashMap<>();
+  private void addService(String service) {
+    if (!adjacencyList.containsKey(service)) {
+      adjacencyList.put(service, new LinkedList<>());
     }
+  }
 
-    private void addService(String service) {
-        if (!adjacencyList.containsKey(service)) {
-            adjacencyList.put(service, new LinkedList<>());
-        }
-    }
+  void addServices(List<String> services) {
+    services.forEach(this::addService);
+  }
 
-    void addServices(List<String> services) {
-        services.forEach(this::addService);
-    }
+  private void addDependency(String service, String serviceDependency) {
+    addService(service);
+    addService(serviceDependency);
+    adjacencyList.get(service).add(serviceDependency);
+  }
 
-    private void addDependency(String service, String serviceDependency) {
-        addService(service);
-        addService(serviceDependency);
-        adjacencyList.get(service).add(serviceDependency);
-    }
+  void addAllDependencies(HashMap<String, LinkedList<String>> dependencies) {
+    dependencies
+      .keySet()
+      .forEach(
+        service ->
+          dependencies
+            .get(service)
+            .forEach(
+              serviceDependency -> addDependency(service, serviceDependency)
+            )
+      );
+  }
 
-    void addAllDependencies(HashMap<String, LinkedList<String>> dependencies) {
-        dependencies.keySet().forEach(service ->
-                dependencies.get(service).forEach(serviceDependency ->
-                        addDependency(service, serviceDependency)
-                )
+  List<String> findAllServicesBetween(String startService, String endService) {
+    HashMap<String, Boolean> visited = markAsNotVisited();
+
+    Queue<String> queue = new LinkedList<>();
+
+    HashMap<String, String> previous = new HashMap<>();
+
+    visited.put(startService, true);
+    queue.offer(startService);
+    previous.put(startService, QUEUE_START);
+
+    while (!queue.isEmpty()) {
+      String servicePolled = queue.poll();
+
+      if (servicePolled.equals(endService)) {
+        return reverseToGetPath(previous, endService);
+      }
+
+      adjacencyList
+        .get(servicePolled)
+        .stream()
+        .filter(ifServiceVisited(visited))
+        .forEach(
+          adjacentService -> {
+            visited.put(adjacentService, true);
+            queue.offer(adjacentService);
+            previous.put(adjacentService, servicePolled);
+          }
         );
     }
 
-    List<String> findAllServicesBetween(String startService, String endService) {
-        HashMap<String, Boolean> visited = markAsNotVisited();
+    return Collections.emptyList();
+  }
 
-        Queue<String> queue = new LinkedList<>();
+  List<String> findAllAffectedServices(String startService) {
+    HashMap<String, Boolean> visited = markAsNotVisited();
+    Queue<String> queue = new LinkedList<>();
+    List<String> reachedServices = new ArrayList<>();
+    visited.put(startService, true);
+    queue.offer(startService);
 
-        HashMap<String, String> previous = new HashMap<>();
+    while (!queue.isEmpty()) {
+      String servicePolled = queue.poll();
 
-        visited.put(startService, true);
-        queue.offer(startService);
-        previous.put(startService, QUEUE_START);
+      adjacencyList
+        .get(servicePolled)
+        .stream()
+        .filter(ifServiceVisited(visited))
+        .forEach(
+          adjacentService -> {
+            visited.put(adjacentService, true);
+            queue.offer(adjacentService);
+            reachedServices.add(adjacentService);
+          }
+        );
+    }
+    return orderList(reachedServices);
+  }
 
-        while (!queue.isEmpty()) {
-            String servicePolled = queue.poll();
+  private static List<String> orderList(List<String> reachedServices) {
+    return reachedServices.stream().sorted().collect(Collectors.toList());
+  }
 
-            if (servicePolled.equals(endService)) {
-                return reverseToGetPath(previous, endService);
-            }
+  private static Predicate<String> ifServiceVisited(
+    HashMap<String, Boolean> visited
+  ) {
+    return adjacentService -> !visited.get(adjacentService);
+  }
 
-            adjacencyList.get(servicePolled)
-                    .stream()
-                    .filter(ifServiceVisited(visited))
-                    .forEach(adjacentService -> {
-                        visited.put(adjacentService, true);
-                        queue.offer(adjacentService);
-                        previous.put(adjacentService, servicePolled);
-                    });
-        }
+  private HashMap<String, Boolean> markAsNotVisited() {
+    HashMap<String, Boolean> visited = new HashMap<>();
+    adjacencyList.keySet().forEach(service -> visited.put(service, false));
+    return visited;
+  }
 
-        return Collections.emptyList();
+  private List<String> reverseToGetPath(
+    HashMap<String, String> previousLinks,
+    String endService
+  ) {
+    List<String> path = new ArrayList<>();
+    String current = endService;
+
+    while (!current.equals(QUEUE_START)) {
+      path.add(current);
+      current = previousLinks.get(current);
     }
 
-    List<String> findAllAffectedServices(String startService) {
-        HashMap<String, Boolean> visited = markAsNotVisited();
-        Queue<String> queue = new LinkedList<>();
-        List<String> reachedServices = new ArrayList<>();
-        visited.put(startService, true);
-        queue.offer(startService);
-
-        while (!queue.isEmpty()) {
-            String servicePolled = queue.poll();
-
-            adjacencyList.get(servicePolled)
-                    .stream()
-                    .filter(ifServiceVisited(visited))
-                    .forEach(adjacentService -> {
-                        visited.put(adjacentService, true);
-                        queue.offer(adjacentService);
-                        reachedServices.add(adjacentService);
-                    });
-        }
-        return orderList(reachedServices);
-    }
-
-    private static List<String> orderList(List<String> reachedServices) {
-        return reachedServices.stream().sorted().collect(Collectors.toList());
-    }
-
-    private static Predicate<String> ifServiceVisited(HashMap<String, Boolean> visited) {
-        return adjacentService -> !visited.get(adjacentService);
-    }
-
-    private HashMap<String, Boolean> markAsNotVisited() {
-        HashMap<String, Boolean> visited = new HashMap<>();
-        adjacencyList.keySet().forEach(service -> visited.put(service, false));
-        return visited;
-    }
-
-    private List<String> reverseToGetPath(HashMap<String, String> previousLinks, String endService) {
-        List<String> path = new ArrayList<>();
-        String current = endService;
-
-        while (!current.equals(QUEUE_START)) {
-            path.add(current);
-            current = previousLinks.get(current);
-        }
-
-        Collections.reverse(path);
-        return path;
-    }
+    Collections.reverse(path);
+    return path;
+  }
 }
-

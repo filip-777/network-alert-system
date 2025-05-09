@@ -8,5 +8,5 @@ public interface AlertNetwork {
   List<String> getDependencies(String service);
   List<String> findAlertPropagationPath(String source, String target);
   List<String> getAffectedServices(String source);
-//  List<Pair<String, String>> suggestContainmentEdges(String source); // Bonus
+  //  List<Pair<String, String>> suggestContainmentEdges(String source); // Bonus
 }

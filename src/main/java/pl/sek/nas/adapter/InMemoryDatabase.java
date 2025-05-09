@@ -4,8 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 class InMemoryDatabase {
-    static final HashMap<String, LinkedList<String>> DATABASE = new HashMap<>();
+  static final HashMap<String, LinkedList<String>> DATABASE = new HashMap<>();
 
-    private InMemoryDatabase() {
-    }
+  private InMemoryDatabase() {}
 }
